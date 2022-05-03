@@ -6,14 +6,26 @@
 #include <unistd.h>
 using namespace std;
 #define NUMBER_OF_CLIENT 8
-#define EXPIRED_TIME_IN_MILISECOND 1200
+#define EXPIRED_TIME_IN_SECOND 1.2
 #define NUMBER_OF_TAXI 4
-
+class TaxiNotFoundException : public exception
+{
+    string mess;
+public:
+    TaxiNotFoundException(string instruction)
+    {
+        mess = instruction;
+    }
+    const char *what() const throw()
+    {
+        return mess.c_str();
+    }
+};
 class Taxi{
 private:
     string name;
 public:
-    Taxi(string name):name(name){};
+    Taxi(const string& name):name(name){};
     string getName() {
         return name;
     }
@@ -56,23 +68,17 @@ public:
     }
     Taxi createTaxi(){
         sleep(0.2); // The time to create the taxi.
-        
-
+        Taxi taxi("Taxi " + to_string(count));
+        cout << taxi.getName() + " is created\n";
+        return taxi;
     }
     void waitingUntilTaxiAvailable(){
-
+        if (waitting){
+            waitting = false;
+            throw TaxiNotFoundException("No taxi available");
+        }
+    }
+    void waitting(long numberOfSecond){
+        sleep(numberOfSecond);
     }
 };
-
-class bar {
-public:
-    void foo() {
-        std::cout << "hello from member function" << std::endl;
-    }
-};
-
-int main()
-{
-    thread t(&bar::foo, bar());
-    t.join();
-}
