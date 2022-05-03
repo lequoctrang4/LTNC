@@ -38,6 +38,9 @@ public:
     Taxi operator=(const Taxi& taxi){
         return taxi;
     }
+    bool operator==(const Taxi& taxi){
+        return (this->name == taxi.name);
+    }
 };
 
 class TaxiPool {
@@ -63,7 +66,11 @@ public:
     }
 
     void release(Taxi taxi) {
-        //remove(inUse.begin(), inUse.end(), taxi);
+        list<Taxi>::iterator it = inUse.begin();
+        for (; it != inUse.end() ; ++it) {
+            if(*it == taxi) break;
+        }
+        remove(inUse.begin(), inUse.end(), taxi);
         available.push_back(taxi);
         cout << taxi.getName() << " is free\n";
     }
@@ -84,7 +91,7 @@ public:
 };
 
 class ClientThread{
-    
+
 };
 int main(){
 
