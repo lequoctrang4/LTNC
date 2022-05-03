@@ -40,20 +40,20 @@ public:
     }
 };
 
-class TaxiPool{
+class TaxiPool {
 private:
     list<Taxi> available;
     list<Taxi> inUse;
     int count = 0;
-    bool waitting = false;
+    bool waiting = false;
 public:
-    Taxi getTaxi(){
-        if(!available.empty()){
+    Taxi getTaxi() {
+        if (!available.empty()) {
             Taxi taxi = available.front();
             available.pop_front();
             inUse.push_back(taxi);
         }
-        if (count == NUMBER_OF_TAXI){
+        if (count == NUMBER_OF_TAXI) {
             this->waitingUntilTaxiAvailable();
             return this->getTaxi();
         }
@@ -61,24 +61,31 @@ public:
         inUse.push_back(taxi);
         return taxi;
     }
-    void release(Taxi taxi){
-        remove(inUse.begin(), inUse.end(), taxi);
+
+    void release(Taxi taxi) {
+        //remove(inUse.begin(), inUse.end(), taxi);
         available.push_back(taxi);
         cout << taxi.getName() << " is free\n";
     }
-    Taxi createTaxi(){
+
+    Taxi createTaxi() {
         sleep(0.2); // The time to create the taxi.
         Taxi taxi("Taxi " + to_string(count));
         cout << taxi.getName() + " is created\n";
         return taxi;
     }
-    void waitingUntilTaxiAvailable(){
-        if (waitting){
-            waitting = false;
+
+    void waitingUntilTaxiAvailable() {
+        if (waiting) {
+            waiting = false;
             throw TaxiNotFoundException("No taxi available");
         }
     }
-    void waitting(long numberOfSecond){
-        sleep(numberOfSecond);
-    }
 };
+
+class ClientThread{
+    
+};
+int main(){
+
+}
